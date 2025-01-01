@@ -1,27 +1,24 @@
 const fs = require('fs');
 const path = require('path');
-
-// tentukan lokasi file JSON
 const filePath = path.join(__dirname, '../data/tasks.json');
 
-// membaca data dari file JSON
 const readTasksFromFile = () => {
     try {
-        const data = fs.readFileSync(filePath, 'utf-8');
-        return JSON.parse(data);
-        } catch (error) {
-            console.error('error reading tasks file: ', error.message);
-            return [];
-        }
-    };
+        const data = fs.readFileSync(filePath, 'utf8');
+        return JSON.parse(data) || [];
+    } catch (error) {
+        console.error('Error reading tasks file:', error.message);
+        return []; // Fallback jika file rusak atau tidak ada
+    }
+};
 
-    // menulis data ke file JSON
-    const writeTasksToFile = (tasks) => {
-        try {
-            fs.writeFileSync(filePath, JSON.stringify(tasks, null, 2), 'utf-8');
-            } catch (error) {
-                console.error('error writing tasks file: ', error.message);
-                }
-    };
+const writeTasksToFile = (tasks) => {
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(tasks, null, 2));
+    } catch (error) {
+        console.error('Error writing tasks file:', error.message);
+        throw error; // Lempar error agar controller dapat menangani
+    }
+};
 
-    module.exports = { readTasksFromFile, writeTasksToFile};
+module.exports = { readTasksFromFile, writeTasksToFile };

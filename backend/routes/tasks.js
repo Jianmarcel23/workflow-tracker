@@ -1,22 +1,21 @@
 const express = require('express');
-const { getTasks, addTask, deleteTask, updateTask, markTaskAsCompleted } = require('../controllers/taskController');
-const { validateTaskName } = require('../middlewares/validationMiddleware');
+const taskController = require('../controllers/taskController');
 
 const router = express.Router();
 
 // Route untuk mendapatkan semua tugas
-router.get('/', getTasks);
+router.get('/', taskController.getAllTasks);
 
-// Route untuk menambahkan tugas baru (dengan validasi)
-router.post('/', validateTaskName, addTask);
+// Route untuk menambahkan tugas baru
+router.post('/', taskController.createTask);
+
+// Route untuk memperbarui tugas
+router.put('/:id', taskController.updateTask);
 
 // Route untuk menghapus tugas
-router.delete('/:id', deleteTask);
+router.delete('/:id', taskController.deleteTask);
 
-// Route untuk mengupdate tugas (dengan validasi)
-router.put('/:id', validateTaskName, updateTask);
-
-// Route untuk menandai task sebagai selesai
-router.patch('/:id/completed', markTaskAsCompleted);
+// Route untuk menandai tugas sebagai selesai
+router.patch('/:id/completed', taskController.markTaskAsCompleted);
 
 module.exports = router;

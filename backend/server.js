@@ -1,22 +1,25 @@
 const express = require('express');
+const connectToDatabase = require('./database');
 const taskRoutes = require('./routes/tasks');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Middleware
-
+// Middleware untuk parsing JSON
 app.use(express.json());
+
+// Koneksi ke database
+connectToDatabase();
 
 // Routes
 app.use('/tasks', taskRoutes);
 
-// Default Route
-app.get('/', (req, res) => {
-    res.send('Welcome to the Workflow Tracker API');
+// Middleware untuk handling error 404
+app.use((req, res) => {
+    res.status(404).json({ message: 'Route not found' });
 });
 
-// Jalankan Server
+// Menjalankan server
 app.listen(PORT, () => {
-    console.log(`Workflow Tracker backend is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

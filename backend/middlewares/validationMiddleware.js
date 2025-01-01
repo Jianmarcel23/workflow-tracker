@@ -1,13 +1,9 @@
 const validateTaskName = (req, res, next) => {
     const { name } = req.body;
+    if (!name || typeof name !== 'string' || name.trim().length < 1 || name.trim().length > 50) {
+        return res.status(400).json({ message: 'Task name must be a string with 1-50 characters' });
+    }
+    next();
+};
 
-
-    // validasi nama harus ada, berupa string dan panjang 3-100 karakter
-    if (!name || typeof name !== 'string' || name.trim().length < 3 || name.trim().length > 100) {
-        return res.status(400).json({ message: 'task name must be a between 3-100 characters' });
-        }
-        next();
-
-        };
-
-        module.exports = { validateTaskName };
+module.exports = { validateTaskName };
