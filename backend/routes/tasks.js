@@ -1,21 +1,14 @@
 const express = require('express');
 const taskController = require('../controllers/taskController');
+const { validateCreateTask, validateUpdateTask } = require('../middlewares/validationMiddleware');
 
 const router = express.Router();
 
-// Route untuk mendapatkan semua tugas
+// Pastikan middleware validasi diberikan sebagai array
 router.get('/', taskController.getAllTasks);
-
-// Route untuk menambahkan tugas baru
-router.post('/', taskController.createTask);
-
-// Route untuk memperbarui tugas
-router.put('/:id', taskController.updateTask);
-
-// Route untuk menghapus tugas
+router.post('/', validateCreateTask, taskController.createTask);
+router.put('/:id', validateUpdateTask, taskController.updateTask);
 router.delete('/:id', taskController.deleteTask);
-
-// Route untuk menandai tugas sebagai selesai
 router.patch('/:id/completed', taskController.markTaskAsCompleted);
 
 module.exports = router;
